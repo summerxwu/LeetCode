@@ -31,3 +31,4 @@ public:
     return pre_node->next;
   }
 };
+int main() { return 0; }
