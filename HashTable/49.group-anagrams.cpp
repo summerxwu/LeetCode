@@ -70,7 +70,7 @@ public:
 
     vector<vector<string>> groupAnagrams(vector<string> &strs)
     {
-        unordered_map<string, vecotr<string>> result;
+        unordered_map<string, vector<string>> result;
         for (auto &&str : strs)
         {
             auto key = this->genKey(str);
