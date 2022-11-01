@@ -59,7 +59,7 @@ public:
             int *s = statistics[i];
             for (size_t j = 0; j < p.size(); j++)
             {
-                s[p[j] - 'a']++;
+                s[p.at(j) - 'a']++;
             }
         }
         int min_count[26] = {100};
@@ -86,9 +86,8 @@ public:
             {
                 while (count > 0)
                 {
-                    char a = 'a' + i;
-                    result.push_back(string(&a));
-                    result.push_back("a");
+                    string item(1, 'a' + i);
+                    result.push_back(item);
                     count--;
                 }
             }
