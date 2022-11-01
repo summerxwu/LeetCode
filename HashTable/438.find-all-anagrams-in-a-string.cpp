@@ -53,11 +53,53 @@
  */
 
 // @lc code=start
+#include <string>
+#include <vector>
+using namespace std;
 class Solution
 {
 public:
+    bool isAnagrams(string s, int count[])
+    {
+        for (size_t i = 0; i < s.size(); i++)
+        {
+            count[s[i] - 'a']--;
+        }
+
+        for (size_t i = 0; i < 26; i++)
+        {
+            if (count[i] != 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     vector<int> findAnagrams(string s, string p)
     {
+        vector<int> result;
+        if (s.size() < p.size())
+        {
+            return result;
+        }
+
+        size_t step = p.size();
+        for (size_t i = step - 1; i < s.size(); i++)
+        {
+            int count[26] = {0};
+            for (size_t i = 0; i < p.size(); i++)
+            {
+                count[p[i] - 'a']++;
+            }
+            size_t start = i - (step - 1);
+            string sb_str = s.substr(start, step);
+            if (this->isAnagrams(sb_str, count))
+            {
+                result.push_back(start);
+            }
+        }
+        return result;
     }
 };
 // @lc code=end
