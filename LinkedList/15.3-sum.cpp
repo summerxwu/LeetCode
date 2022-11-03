@@ -107,6 +107,10 @@ public:
         }
         for (int i = 0; i < length - 2; i++)
         {
+            if (i > 0 && nums[i] == nums[i - 1])
+            {
+                continue;
+            }
             int left = i + 1;
             int right = length - 1;
             while (left < right)
