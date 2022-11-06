@@ -45,6 +45,7 @@ class Solution
 public:
     string reverseStr(string s, int k)
     {
+        return "";
     }
 };
 // @lc code=end
