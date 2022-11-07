@@ -40,12 +40,58 @@
  */
 
 // @lc code=start
+#include <string>
+using namespace std;
 class Solution
 {
 public:
+    string reverseRange(string &s, size_t start, size_t end, int k)
+    {
+        size_t r_start = start;
+        size_t r_end = 0;
+        if (end - start + 1 <= k)
+        {
+            r_end = end;
+        }
+        else if (k < end - start + 1 && end - start + 1 <= 2 * k)
+        {
+            r_end = start + k - 1;
+        }
+        else
+        {
+            return s;
+        }
+        while (r_start < r_end)
+        {
+            char t;
+            t = s.at(r_end);
+            s[r_end] = s.at(r_start);
+            s[r_start] = t;
+            r_start++;
+            r_end--;
+        }
+        return s;
+    }
+
     string reverseStr(string s, int k)
     {
-        return "";
+        string result = s;
+        if (s.size() <= 2 * k)
+        {
+            return this->reverseRange(result, 0, s.size() - 1, k);
+        }
+        size_t i = 0;
+        for (; i + 2 * k < s.size(); i = i + 2 * k)
+        {
+            this->reverseRange(result, i, i + 2 * k - 1, k);
+        }
+        return this->reverseRange(result, i, s.size() - 1, k);
     }
 };
 // @lc code=end
+int main()
+{
+    Solution s;
+    string input = "abcedfghi";
+    s.reverseStr(input, 2);
+}
