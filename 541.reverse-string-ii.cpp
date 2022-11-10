@@ -48,6 +48,7 @@ public:
     string reverseRange(string &s, size_t start, size_t end, int k)
     {
         size_t r_start = start;
+
         size_t r_end = 0;
         if (end - start + 1 <= k)
         {
