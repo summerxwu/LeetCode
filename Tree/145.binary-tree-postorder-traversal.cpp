@@ -50,6 +50,8 @@
  * Follow up: Recursive solution is trivial, could you do it iteratively?
  */
 
+#include <algorithm>
+#include <stack>
 #include <vector>
 using namespace std;
 struct TreeNode {
@@ -75,8 +77,8 @@ struct TreeNode {
  * };
  */
 class Solution {
-public:
-  vector<int> postorderTraversal(TreeNode *root) {
+ public:
+  vector<int> _postorderTraversal(TreeNode *root) {
     if (root == nullptr) {
       return _rlt;
     }
@@ -85,8 +87,52 @@ public:
     _rlt.push_back(root->val);
     return _rlt;
   }
+  // Iterate approch
+  vector<int> __postorderTraversal(TreeNode *root) {
+    if (root == NULL) {
+      return _rlt;
+    }
+    _stack.push(root);
+    while (_stack.size() != 0) {
+      TreeNode *iter = _stack.top();
+      _rlt.push_back(iter->val);
+      _stack.pop();
+      if (iter->left != NULL) {
+        _stack.push(iter->left);
+      }
+      if (iter->right != NULL) {
+        _stack.push(iter->right);
+      }
+    }
+    std::reverse(_rlt.begin(), _rlt.end());
+    return _rlt;
+  }
+  // Iterate approch
+  vector<int> postorderTraversal(TreeNode *root) {
+    if (root == nullptr) {
+      return _rlt;
+    }
+    _stack.push(root);
+    while (_stack.size()) {
+      TreeNode *iter = _stack.top();
+      if (iter->left != nullptr) {
+        _stack.push(iter->left);
+        iter->left = nullptr;
+        continue;
+      }
+      if (iter->right != nullptr) {
+        _stack.push(iter->right);
+        iter->right = nullptr;
+        continue;
+      }
+      _stack.pop();
+      _rlt.push_back(iter->val);
+    }
+    return _rlt;
+  }
 
-private:
+ private:
   vector<int> _rlt;
+  std::stack<TreeNode *> _stack;
 };
 // @lc code=end

@@ -52,6 +52,7 @@
  */
 
 #include <iostream>
+#include <stack>
 #include <vector>
 using namespace std;
 struct TreeNode {
@@ -78,7 +79,7 @@ struct TreeNode {
  */
 class Solution {
 public:
-  vector<int> preorderTraversal(TreeNode *root) {
+  vector<int> reCurpreorderTraversal(TreeNode *root) {
     if (root == nullptr) {
       return _rlt;
     }
@@ -87,8 +88,27 @@ public:
     this->preorderTraversal(root->right);
     return _rlt;
   }
+  vector<int> preorderTraversal(TreeNode *root) {
+    if (root == nullptr) {
+      return _rlt;
+    }
+    _stack.push(root);
+    while (_stack.size() != 0) {
+      TreeNode *iter = _stack.top();
+      _stack.pop();
+      _rlt.push_back(iter->val);
+      if (iter->right != nullptr) {
+        _stack.push(iter->right);
+      }
+      if (iter->left != nullptr) {
+        _stack.push(iter->left);
+      }
+    }
+    return _rlt;
+  }
 
 private:
   std::vector<int> _rlt;
+  std::stack<TreeNode *> _stack;
 };
 // @lc code=end

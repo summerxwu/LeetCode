@@ -50,6 +50,8 @@
  * Follow up: Recursive solution is trivial, could you do it iteratively?
  */
 
+#include <algorithm>
+#include <stack>
 #include <vector>
 using namespace std;
 struct TreeNode {
@@ -75,8 +77,8 @@ struct TreeNode {
  * };
  */
 class Solution {
-public:
-  vector<int> inorderTraversal(TreeNode *root) {
+ public:
+  vector<int> _inorderTraversal(TreeNode *root) {
     if (root == nullptr) {
       return _rlt;
     }
@@ -86,7 +88,33 @@ public:
     return _rlt;
   }
 
-private:
+  vector<int> __inorderTraversal(TreeNode *root) {
+    if (root == nullptr) {
+      return _rlt;
+    }
+    _stack.push(root);
+    while (_stack.size()) {
+      TreeNode *iter = _stack.top();
+      if (iter->left != nullptr) {
+        _stack.push(iter->left);
+        // because of the recalling of the node, the left pt need to be set
+        // null.
+        iter->left = nullptr;
+        continue;
+      } else {
+        _rlt.push_back(iter->val);
+        _stack.pop();
+        if (iter->right != nullptr) {
+          _stack.push(iter->right);
+          iter->right = nullptr;
+        }
+      }
+    }
+    return _rlt;
+  }
+
+ private:
   vector<int> _rlt;
+  stack<TreeNode *> _stack;
 };
 // @lc code=end
