@@ -42,6 +42,8 @@
  *
  * Follow up: Could you solve it both recursively and iteratively?
  */
+#include <assert.h>
+
 #include <vector>
 
 struct TreeNode {
@@ -56,13 +58,73 @@ struct TreeNode {
 // @lc code=start
 class Solution {
  public:
+  std::vector<int> flatternLeftTree(TreeNode *root) {
+    // left -> right -> middel
+    std::vector<int> left, right;
+    if (root->left) {
+      left = flatternLeftTree(root->left);
+    } else {
+      if (root->right) {
+        left.push_back(-101);
+      }
+    }
+
+    if (root->right) {
+      right = flatternLeftTree(root->right);
+    } else {
+      if (root->left) {
+        right.push_back(-101);
+      }
+    }
+
+    left.insert(left.end(), right.begin(), right.end());
+    left.push_back(root->val);
+
+    return left;
+  }
+  std::vector<int> flatternRightTree(TreeNode *root) {
+    // middel -> left -> right
+    std::vector<int> left, right;
+    if (root->left) {
+      left = flatternRightTree(root->left);
+    } else {
+      if (root->right) {
+        left.push_back(-101);
+      }
+    }
+
+    if (root->right) {
+      right = flatternRightTree(root->right);
+    } else {
+      if (root->left) {
+        right.push_back(-101);
+      }
+    }
+
+    std::vector<int> result;
+    result.push_back(root->val);
+    result.insert(result.end(), left.begin(), left.end());
+    result.insert(result.end(), right.begin(), right.end());
+    return result;
+  }
   std::vector<int> flatternTree(TreeNode *root) {
     std::vector<int> left_bound, right_bound;
+    left_bound.clear();
+    right_bound.clear();
     if (root->left) {
-      left_bound = flatternTree(root->left);
+      left_bound = flatternLeftTree(root->left);
+    } else {
+      if (root->right) {
+        left_bound.push_back(-101);
+      }
     }
+
     if (root->right) {
-      right_bound = flatternTree(root->right);
+      right_bound = flatternRightTree(root->right);
+    } else {
+      if (root->left) {
+        right_bound.push_back(-101);
+      }
     }
 
     left_bound.push_back(root->val);
@@ -73,8 +135,8 @@ class Solution {
     // print the middle order sequence of the tree
     // then confirm that the seqence is symmetric or not
     std::vector<int> ft = flatternTree(root);
-    size_t left = 0;
-    size_t right = ft.size() - 1;
+    int left = 0;
+    int right = ft.size() - 1;
     while (left <= right) {
       if (ft[left] != ft[right]) {
         return false;
@@ -86,3 +148,47 @@ class Solution {
   }
 };
 // @lc code=end
+TreeNode *BuildTree(int input[], int size) {
+  int size_save = size;
+  TreeNode *root = new TreeNode();
+  // build empty tree
+  std::vector<TreeNode *> queue;
+  queue.push_back(root);
+  size--;
+  int iter = -1;
+  while (size > 0) {
+    ++iter;
+    TreeNode *i = queue[iter];
+    if (!i->left) {
+      i->left = new TreeNode();
+      size--;
+      queue.push_back(i->left);
+      if (size <= 0) {
+        break;
+      }
+    }
+    if (!i->right) {
+      i->right = new TreeNode();
+      size--;
+      queue.push_back(i->right);
+      if (size <= 0) {
+        break;
+      }
+    }
+  }
+  assert(queue.size() == size_save);
+  // assign the value to the tree
+  for (size_t i = 0; i < size_save; i++) {
+    TreeNode *node = queue[i];
+    node->val = input[i];
+  }
+  // print the Tree
+
+  return root;
+}
+
+int main() {
+  int valueList[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+  TreeNode *tree = BuildTree(valueList, 10);
+  return 0;
+}
